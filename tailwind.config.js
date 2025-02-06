@@ -11,6 +11,18 @@ module.exports = {
         "rubik-medium": ["Rubik-Medium", "sans-serif"],
         "rubik-semibold": ["Rubik-SemiBold", "sans-serif"],
         "rubik-light": ["Rubik-Light", "sans-serif"],
+        roboto: ["Roboto-Regular", "sans-serif"],
+        "roboto-bold": ["Roboto-Bold", "sans-serif"],
+        "roboto-extrabold": ["Roboto-ExtraBold", "sans-serif"],
+        "roboto-medium": ["Roboto-Medium", "sans-serif"],
+        "roboto-semibold": ["Roboto-SemiBold", "sans-serif"],
+        "roboto-light": ["Roboto-Light", "sans-serif"],
+        notoSans: ["NotoSans-Regular", "sans-serif"],
+        "notoSans-bold": ["NotoSans-Bold", "sans-serif"],
+        "notoSans-extrabold": ["NotoSans-ExtraBold", "sans-serif"],
+        "notoSans-medium": ["NotoSans-Medium", "sans-serif"],
+        "notoSans-semibold": ["NotoSans-SemiBold", "sans-serif"],
+        "notoSans-light": ["NotoSans-Light", "sans-serif"],
       },
       colors: {
         primary: {
