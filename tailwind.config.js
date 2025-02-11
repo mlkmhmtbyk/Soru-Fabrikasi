@@ -25,6 +25,8 @@ module.exports = {
         "notoSans-light": ["NotoSans-Light", "sans-serif"],
       },
       colors: {
+        paletteBlue: { DEFAULT: "#A2CEED" },
+        paletteDarkBlue: { DEFAULT: "#01243A" },
         primary: {
           100: "#0061FF0A",
           200: "#0061FF1A",

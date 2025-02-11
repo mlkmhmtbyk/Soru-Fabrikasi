@@ -1,24 +1,20 @@
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import Carousel from "@/components/Carousel";
+import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const onboarding = () => {
-  const handleLogin = async () => {
-    console.log("login yapıldı.");
+  const openSignUp = async () => {
+    router.push("/sign-up");
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Carousel />
       <View className="flex-1 justify-end py-10 px-10">
         <TouchableOpacity
-          onPress={handleLogin}
+          onPress={openSignUp}
           className="bg-white shadow-md shadow-zinc-500 rounded-full w-full py-4"
         >
           <View className="flex flex-row items-center justify-center">
@@ -28,7 +24,7 @@ const onboarding = () => {
           </View>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -38,5 +34,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
+  },
+  pageContainer: {
+    flex: 1,
+    backgroundColor: "white",
+    padding: 20,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  headerImage: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
+  },
+  headerTexts: {
+    width: 150,
+    flexDirection: "row",
+  },
+  headerText: {
+    color: "#01243A",
+    fontSize: 16,
+    paddingHorizontal: 12,
   },
 });
