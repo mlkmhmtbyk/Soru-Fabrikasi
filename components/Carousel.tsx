@@ -20,25 +20,35 @@ const Carousel = () => {
 
   const viewableItemsChanged = useRef(
     (info: {
-      viewableItems: ViewToken<{
-        id: string;
-        title: string;
-        description: string;
-        image: any;
-      }>[];
-      changed: ViewToken<{
-        id: string;
-        title: string;
-        description: string;
-        image: any;
-      }>[];
+      viewableItems:
+        | ViewToken<{
+            id: string;
+            title: string;
+            description: string;
+            image: any;
+          }>[]
+        | undefined;
+      changed:
+        | ViewToken<{
+            id: string;
+            title: string;
+            description: string;
+            image: any;
+          }>[]
+        | undefined;
     }) => {
-      setCurrentIndex(info.viewableItems[0].index ?? 0);
+      if (info.viewableItems) {
+        info.viewableItems.forEach((item) => {
+          if (item.isViewable && item.index !== null) {
+            setCurrentIndex(item.index);
+          }
+        });
+      }
     }
   ).current;
 
   return (
-    <SafeAreaView className="flex flex-2 w-full h-5/6 justify-center items-center">
+    <SafeAreaView className="flex flex-1 w-full h-full justify-center items-center">
       <FlatList
         data={onboardingSlides}
         renderItem={({ item }) => <CarouselItem item={item} />}
