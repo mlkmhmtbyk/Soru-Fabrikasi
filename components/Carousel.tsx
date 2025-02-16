@@ -1,8 +1,4 @@
 import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
   FlatList,
   Animated,
   ViewToken,

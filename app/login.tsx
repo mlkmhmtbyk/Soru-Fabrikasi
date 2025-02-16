@@ -1,32 +1,38 @@
 import {
   View,
   Text,
+  SafeAreaView,
   StyleSheet,
   Image,
+  TouchableOpacity,
   TextInput,
   Pressable,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { colors } from "../constants/palette";
+import { colors } from "@/constants/palette";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const SignUp = () => {
-  const [formData, setFormData] = useState({
+const Login = () => {
+  const [signUpFormData, setSignUpFormData] = useState({
     email: "",
     password: "",
-    username: "",
   });
 
-  const openLogin = async () => {
-    router.push("/login");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
-  function handleSignUp() {
-    console.log("SignUp");
+  const openSignUp = async () => {
+    router.push("/sign-up");
+  };
+
+  function handleLogin() {
+    console.log("Login");
   }
 
   return (
@@ -44,12 +50,13 @@ const SignUp = () => {
           </TouchableOpacity>
           <View style={styles.headerTexts}>
             <View style={styles.headerText}>
-              <TouchableOpacity onPress={openLogin}>
-                <Text style={styles.loginText}>Giriş Yap</Text>
+              <TouchableOpacity onPress={openSignUp}>
+                <Text style={styles.signUpText}>Kayıt Ol</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
+        <View style={{ flex: 1, backgroundColor: colors.white }}></View>
         <View style={styles.formContainer}>
           <View style={styles.formField}>
             <TextInput
@@ -58,53 +65,44 @@ const SignUp = () => {
               placeholder="E-mail"
               placeholderTextColor="#01243A"
               onChangeText={(text) => {
-                setFormData({ ...formData, email: text });
+                setSignUpFormData({ ...signUpFormData, email: text });
               }}
             />
           </View>
-          <View style={styles.formField}>
+          <View style={styles.passwordField}>
             <TextInput
               className="bg-accent-100"
               style={styles.formInput}
               placeholder="Şifre"
+              secureTextEntry={!showPassword}
               placeholderTextColor="#01243A"
               onChangeText={(text) => {
-                setFormData({ ...formData, email: text });
+                setSignUpFormData({ ...signUpFormData, password: text });
               }}
             />
-          </View>
-          <View style={styles.formField}>
-            <TextInput
-              className="bg-accent-100"
-              style={styles.formInput}
-              placeholder="Şifre (Tekrar)"
-              placeholderTextColor="#01243A"
-              onChangeText={(text) => {
-                setFormData({ ...formData, email: text });
-              }}
+            <MaterialCommunityIcons
+              name={showPassword ? "eye-off" : "eye"}
+              size={17}
+              color="#01243A"
+              style={styles.icon}
+              onPress={toggleShowPassword}
             />
           </View>
-          <View style={styles.formField}>
-            <TextInput
-              className="bg-accent-100"
-              style={styles.formInput}
-              placeholder="Kullanıcı Adı"
-              placeholderTextColor="#01243A"
-              onChangeText={(text) => {
-                setFormData({ ...formData, email: text });
-              }}
-            />
-          </View>
-          <Pressable style={styles.formButton} onPress={handleSignUp}>
-            <Text style={styles.formButtonText}>Kayıt Ol</Text>
+          <Pressable style={styles.formButton} onPress={handleLogin}>
+            <Text style={styles.formButtonText}>Giriş Yap</Text>
           </Pressable>
+          <TouchableOpacity>
+            <Text style={styles.forgotPasswordText}>Şifremi Unuttum</Text>
+          </TouchableOpacity>
         </View>
+
+        <View style={{ flex: 3, backgroundColor: "white" }}></View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
 
-export default SignUp;
+export default Login;
 
 const styles = StyleSheet.create({
   pageContainer: {
@@ -139,7 +137,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 5,
   },
-  loginText: {
+  signUpText: {
     fontSize: 17,
     flex: 1,
     backgroundColor: "white",
@@ -167,6 +165,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.paletteDarkBlue,
   },
+  passwordField: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#FBFBFD",
+    borderColor: "#01243A",
+    borderWidth: 1,
+    borderRadius: 15,
+    marginBottom: 10,
+    marginVertical: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  icon: {
+    marginRight: 10,
+  },
   formButton: {
     width: "100%",
     height: 50,
@@ -180,5 +193,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  forgotPasswordText: {
+    color: colors.paletteDarkBlue,
+    textDecorationLine: "underline",
+    fontSize: 16,
   },
 });

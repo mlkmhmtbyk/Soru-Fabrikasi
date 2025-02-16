@@ -1,12 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Image,
-} from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import Carousel from "@/components/Carousel";
 import { router } from "expo-router";
@@ -15,6 +7,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Index = () => {
   const openSignUp = async () => {
     router.push("/sign-up");
+  };
+
+  const openLogin = async () => {
+    router.push("/login");
   };
 
   return (
@@ -28,15 +24,9 @@ const Index = () => {
         </TouchableOpacity>
         <View style={styles.headerTexts}>
           <View style={styles.headerText}>
-            <Text
-              className="font-notoSans text-paletteDarkBlue"
-              style={styles.privacyText}
-            >
-              Gizlilik
-            </Text>
-          </View>
-          <View style={styles.headerText}>
-            <Text style={styles.loginText}>Giriş Yap</Text>
+            <TouchableOpacity onPress={openLogin}>
+              <Text style={styles.loginText}>Giriş Yap</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -95,16 +85,16 @@ const styles = StyleSheet.create({
   headerText: {
     backgroundColor: "white",
     alignItems: "flex-end",
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     paddingVertical: 5,
   },
   privacyText: {
-    fontSize: 18,
+    fontSize: 17,
     flex: 1,
     backgroundColor: "white",
   },
   loginText: {
-    fontSize: 18,
+    fontSize: 17,
     flex: 1,
     backgroundColor: "white",
   },
