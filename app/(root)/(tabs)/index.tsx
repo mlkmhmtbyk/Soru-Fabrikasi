@@ -3,6 +3,7 @@ import React from "react";
 import Carousel from "@/components/Carousel";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Counter from "@/components/Counter";
 
 const Index = () => {
   const openSignUp = async () => {
@@ -15,6 +16,9 @@ const Index = () => {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
+      <View style={styles.counter}>
+        <Counter />
+      </View>
       <View style={styles.header}>
         <TouchableOpacity style={styles.logo}>
           <Image
@@ -56,6 +60,9 @@ const Index = () => {
 export default Index;
 
 const styles = StyleSheet.create({
+  counter: {
+    flex: 20,
+  },
   pageContainer: {
     flex: 1,
     backgroundColor: "#white",

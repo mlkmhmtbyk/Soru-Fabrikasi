@@ -3,21 +3,11 @@ import "./global.css";
 import { useFonts } from "expo-font";
 import React, { useEffect } from "react";
 import GlobalProvider from "@/lib/global-provider";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({
-    "Rubik-Bold": require("../assets/fonts/Rubik-Bold.ttf"),
-    "Rubik-ExtraBold": require("../assets/fonts/Rubik-ExtraBold.ttf"),
-    "Rubik-Light": require("../assets/fonts/Rubik-Light.ttf"),
-    "Rubik-Medium": require("../assets/fonts/Rubik-Medium.ttf"),
-    "Rubik-Regular": require("../assets/fonts/Rubik-Regular.ttf"),
-    "Rubik-SemiBold": require("../assets/fonts/Rubik-SemiBold.ttf"),
-    "Roboto-Bold:": require("../assets/fonts/Roboto-Bold.ttf"),
-    "Roboto-Regular:": require("../assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-ExtraBold": require("../assets/fonts/Roboto-ExtraBold.ttf"),
-    "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-SemiBold": require("../assets/fonts/Roboto-SemiBold.ttf"),
     "NotoSans-Bold": require("../assets/fonts/NotoSans-Bold.ttf"),
     "NotoSans-ExtraBold": require("../assets/fonts/NotoSans-ExtraBold.ttf"),
     "NotoSans-Light": require("../assets/fonts/NotoSans-Light.ttf"),
@@ -33,8 +23,8 @@ export default function RootLayout() {
   }, [fontsLoaded]);
 
   return (
-    <GlobalProvider>
+    <Provider store={store}>
       <Stack screenOptions={{ headerShown: false }} />
-    </GlobalProvider>
+    </Provider>
   );
 }
