@@ -9,11 +9,13 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { colors } from "@/constants/palette";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { loginWithGoogle } from "@/lib/appwrite";
 
 const Login = () => {
   const [signUpFormData, setSignUpFormData] = useState({
@@ -31,8 +33,14 @@ const Login = () => {
     router.push("/sign-up");
   };
 
-  function handleLogin() {
-    console.log("Login");
+  async function handleLogin() {
+    const result = await loginWithGoogle();
+
+    if (result) {
+      console.log("Login success");
+    } else {
+      Alert.alert("Error", "Failed to Login");
+    }
   }
 
   return (

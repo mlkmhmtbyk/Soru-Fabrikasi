@@ -8,16 +8,19 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { colors } from "../constants/palette";
+import { signUp, logout, getCurrentUser, login } from "@/lib/appwrite";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    password2: "",
     username: "",
   });
 
@@ -25,8 +28,55 @@ const SignUp = () => {
     router.push("/login");
   };
 
-  function handleSignUp() {
-    console.log("SignUp");
+  async function handleSignUp() {
+    //email verification eklenecek
+    //signup fail ler handle edilecek
+    console.log(formData);
+    if (formData.password !== formData.password2) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
+    }
+
+    const result = await signUp(
+      formData.email,
+      formData.password,
+      formData.username
+    );
+
+    if (result) {
+      console.log("Login success");
+    } else {
+      Alert.alert("Error", "Failed to Login");
+    }
+  }
+
+  async function handleLogin() {
+    const result = await login("deneme@gmail.com", "12345678");
+
+    if (result) {
+      console.log("Logout success");
+    } else {
+      Alert.alert("Error", "Failed to Logout");
+    }
+  }
+
+  async function handleLogout() {
+    const result = await logout();
+
+    if (result) {
+      console.log("Logout success");
+    } else {
+      Alert.alert("Error", "Failed to Logout");
+    }
+  }
+  async function handleGetCurrentUser() {
+    const result = await getCurrentUser();
+
+    if (result) {
+      console.log("get Current user success");
+    } else {
+      Alert.alert("Error", "Failed to get current user");
+    }
   }
 
   return (
@@ -69,7 +119,7 @@ const SignUp = () => {
               placeholder="Şifre"
               placeholderTextColor="#01243A"
               onChangeText={(text) => {
-                setFormData({ ...formData, email: text });
+                setFormData({ ...formData, password: text });
               }}
             />
           </View>
@@ -80,7 +130,7 @@ const SignUp = () => {
               placeholder="Şifre (Tekrar)"
               placeholderTextColor="#01243A"
               onChangeText={(text) => {
-                setFormData({ ...formData, email: text });
+                setFormData({ ...formData, password2: text });
               }}
             />
           </View>
@@ -91,12 +141,21 @@ const SignUp = () => {
               placeholder="Kullanıcı Adı"
               placeholderTextColor="#01243A"
               onChangeText={(text) => {
-                setFormData({ ...formData, email: text });
+                setFormData({ ...formData, username: text });
               }}
             />
           </View>
           <Pressable style={styles.formButton} onPress={handleSignUp}>
             <Text style={styles.formButtonText}>Kayıt Ol</Text>
+          </Pressable>
+          <Pressable style={styles.formButton} onPress={handleLogin}>
+            <Text style={styles.formButtonText}>Login Deneme</Text>
+          </Pressable>
+          <Pressable style={styles.formButton} onPress={handleLogout}>
+            <Text style={styles.formButtonText}>Log Out Deneme</Text>
+          </Pressable>
+          <Pressable style={styles.formButton} onPress={handleGetCurrentUser}>
+            <Text style={styles.formButtonText}>GetCurrentUser</Text>
           </Pressable>
         </View>
       </SafeAreaView>

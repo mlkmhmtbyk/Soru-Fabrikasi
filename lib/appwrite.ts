@@ -1,6 +1,7 @@
 import { Account, Avatars, Client, OAuthProvider } from "react-native-appwrite";
 import * as Linking from "expo-linking";
 import { openAuthSessionAsync } from "expo-web-browser";
+import { ID } from "react-native-appwrite";
 
 export const config = {
   platform: "com.factory.soruFabrikasi",
@@ -18,9 +19,49 @@ client
 export const avatar = new Avatars(client);
 export const account = new Account(client);
 
-export async function login() {
+export async function signUp(email: string, password: string, name: string) {
   try {
-    const redirectUri = Linking.createURL("/");
+    const promise = account.create(ID.unique(), email, password, name);
+
+    promise.then(
+      function (response) {
+        console.log("response:", response); // Success
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function login(email: string, password: string) {
+  try {
+    const promise = account.createEmailPasswordSession(email, password);
+
+    promise.then(
+      function (response) {
+        console.log("response:", response); // Success
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function loginWithGoogle() {
+  try {
+    const redirectUri = Linking.createURL("/home");
 
     const response = await account.createOAuth2Token(
       OAuthProvider.Google,
@@ -72,9 +113,10 @@ export async function logout() {
   }
 }
 
-export async function getUser() {
+export async function getCurrentUser() {
   try {
     const response = await account.get();
+    console.log("response:", response);
 
     if (response.$id) {
       const userAvatar = avatar.getInitials(response.name);
