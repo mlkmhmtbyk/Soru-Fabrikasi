@@ -2,6 +2,7 @@ import { Account, Avatars, Client, OAuthProvider } from "react-native-appwrite";
 import * as Linking from "expo-linking";
 import { openAuthSessionAsync } from "expo-web-browser";
 import { ID } from "react-native-appwrite";
+import axios from "axios";
 
 export const config = {
   platform: "com.factory.soruFabrikasi",
@@ -41,20 +42,31 @@ export async function signUp(email: string, password: string, name: string) {
 
 export async function login(email: string, password: string) {
   try {
-    const promise = account.createEmailPasswordSession(email, password);
-
-    promise.then(
-      function (response) {
-        console.log("response:", response); // Success
+    const response = await axios.post(
+      `${config.endpoint!}/account/sessions`,
+      {
+        email,
+        password,
       },
-      function (error) {
-        console.log(error); // Failure
+      {
+        headers: {
+          "X-Appwrite-Project": config.projectId!,
+          // API Key header olarak ekliyoruz
+        },
       }
     );
 
-    return true;
-  } catch (error) {
-    console.log(error);
+    if (response.status === 201 && response.data?.userId) {
+      console.log("Login successful:", response.data);
+      return true;
+    } else {
+      console.warn("Login failed: Invalid response data");
+    }
+  } catch (error: any) {
+    console.error(
+      "Appwrite error on login:",
+      error.response ? error.response.data : error
+    );
     return false;
   }
 }
@@ -103,24 +115,62 @@ export async function loginWithGoogle() {
   }
 }
 
+// Mevcut session'ı almak
+export async function getCurrentSession() {
+  try {
+    const response = await axios.get(
+      `${config.endpoint}/account/sessions/current`,
+      {
+        headers: {
+          "X-Appwrite-Project": config.projectId!,
+        },
+        withCredentials: true, // Çerez aracılığıyla oturum doğrulaması yapılacak
+      }
+    );
+    console.log("Current session:", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "Failed to get session:",
+      error.response?.data || error.message
+    );
+    return null;
+  }
+}
+
+// Oturum silme işlemi
 export async function logout() {
   try {
-    await account.deleteSession("current");
+    const session = await getCurrentSession();
+    if (!session) throw new Error("No active session found");
+
+    // Oturumu silmek
+    const response = await axios.delete(
+      `${config.endpoint}/account/sessions/${session.$id}`,
+      {
+        headers: {
+          "X-Appwrite-Project": config.projectId!,
+          // API Key kullanılıyor
+        },
+      }
+    );
+
+    console.log("Logout successful:", response.data);
     return true;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.error("Logout failed:", error.response?.data || error.message);
     return false;
   }
 }
 
+// Uçmayı bekliyor
 export async function getCurrentUser() {
   try {
     const response = await account.get();
-    console.log("response:", response);
 
     if (response.$id) {
       const userAvatar = avatar.getInitials(response.name);
-
+      console.log("response getCurrentUser:", response, userAvatar);
       return { ...response, avatar: userAvatar.toString() };
     }
   } catch (error) {

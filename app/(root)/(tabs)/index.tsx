@@ -16,9 +16,6 @@ const Index = () => {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
-      <View style={styles.counter}>
-        <Counter />
-      </View>
       <View style={styles.header}>
         <TouchableOpacity style={styles.logo}>
           <Image

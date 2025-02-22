@@ -14,9 +14,19 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { colors } from "../constants/palette";
-import { signUp, logout, getCurrentUser, login } from "@/lib/appwrite";
+import {
+  signUp,
+  logout as appwriteLogout,
+  getCurrentUser,
+} from "@/lib/appwrite";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "./redux/store";
+import { login, logout } from "./redux/slices/authSlice";
 
 const SignUp = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -51,17 +61,19 @@ const SignUp = () => {
   }
 
   async function handleLogin() {
-    const result = await login("deneme@gmail.com", "12345678");
-
+    const result = await dispatch(
+      login({ email: "deneme@gmail.com", password: "12345678" })
+    );
     if (result) {
-      console.log("Logout success");
+      console.log("Login successss");
     } else {
-      Alert.alert("Error", "Failed to Logout");
+      Alert.alert("Error", "Failed to Login");
     }
   }
 
   async function handleLogout() {
-    const result = await logout();
+    const result = await dispatch(logout());
+    console.log("isLoggedIn:", isLoggedIn);
 
     if (result) {
       console.log("Logout success");

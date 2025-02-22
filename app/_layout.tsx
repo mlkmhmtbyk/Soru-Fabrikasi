@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 import React, { useEffect } from "react";
 import GlobalProvider from "@/lib/global-provider";
 import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import store from "./redux/store";
 
 export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({

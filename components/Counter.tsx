@@ -7,7 +7,7 @@ import {
   increment,
   incrementByAmount,
   incrementAsync,
-} from "@/app/redux/counter/counterSlice";
+} from "@/app/redux/slices/counterSlice";
 
 const Counter = () => {
   const count = useSelector((state: RootState) => state.counter.value);
