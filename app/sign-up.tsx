@@ -20,8 +20,8 @@ import {
   getCurrentUser,
 } from "@/lib/appwrite";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "./redux/store";
-import { login, logout } from "./redux/slices/authSlice";
+import { AppDispatch, RootState } from "../redux/store";
+import { login, logout } from "../redux/slices/authSlice";
 
 const SignUp = () => {
   const dispatch = useDispatch<AppDispatch>();
