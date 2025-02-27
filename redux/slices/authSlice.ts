@@ -3,13 +3,14 @@ import {
   login as appwriteLogin,
   logout as appwriteLogout,
 } from "@/lib/appwrite";
+import User from "@/models/User";
 
 interface AuthState {
-  isLoggedIn: boolean;
+  currentUser: User | null;
 }
 
 const initialState: AuthState = {
-  isLoggedIn: false,
+  currentUser: null,
 };
 
 const authSlice = createSlice({
@@ -18,10 +19,15 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
-      state.isLoggedIn = action.payload ?? false;
+      console.log("Redux login.fullfilled action:", action.payload);
+      if (action.payload !== undefined) {
+        state.currentUser = action.payload;
+      } else {
+        state.currentUser = null;
+      }
     });
     builder.addCase(logout.fulfilled, (state, action) => {
-      state.isLoggedIn = action.payload ?? false;
+      state.currentUser = null;
     });
   },
 });
@@ -32,8 +38,9 @@ export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }: { email: string; password: string }) => {
     try {
-      const isLoggedIn = await appwriteLogin(email, password);
-      return isLoggedIn;
+      const user = await appwriteLogin(email, password);
+      console.log("Login API Response", user);
+      return user;
     } catch (error) {
       throw error;
     }

@@ -18,6 +18,8 @@ import {
   signUp,
   logout as appwriteLogout,
   getCurrentUser,
+  getCurrentSession,
+  getUser,
 } from "@/lib/appwrite";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
@@ -25,7 +27,7 @@ import { login, logout } from "../redux/slices/authSlice";
 
 const SignUp = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const user = useSelector((state: RootState) => state.auth.currentUser);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -54,18 +56,19 @@ const SignUp = () => {
     );
 
     if (result) {
-      console.log("Login success");
+      console.log("Signup success");
+      router.push("/login");
     } else {
-      Alert.alert("Error", "Failed to Login");
+      Alert.alert("Error", "Failed to Sign up");
     }
   }
 
   async function handleLogin() {
     const result = await dispatch(
-      login({ email: "deneme@gmail.com", password: "12345678" })
+      login({ email: "Denemebethov@gmail.com", password: "12345678" })
     );
     if (result) {
-      console.log("Login successss");
+      console.log("Login success");
     } else {
       Alert.alert("Error", "Failed to Login");
     }
@@ -73,7 +76,7 @@ const SignUp = () => {
 
   async function handleLogout() {
     const result = await dispatch(logout());
-    console.log("isLoggedIn:", isLoggedIn);
+    console.log("isLoggedIn:", user?.avatar);
 
     if (result) {
       console.log("Logout success");
@@ -82,7 +85,7 @@ const SignUp = () => {
     }
   }
   async function handleGetCurrentUser() {
-    const result = await getCurrentUser();
+    const result = await getCurrentSession();
 
     if (result) {
       console.log("get Current user success");

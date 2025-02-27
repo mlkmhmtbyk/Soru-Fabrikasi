@@ -15,9 +15,15 @@ import React, { useState } from "react";
 import { router } from "expo-router";
 import { colors } from "@/constants/palette";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { loginWithGoogle } from "@/lib/appwrite";
+import { login, loginWithGoogle } from "@/lib/appwrite";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { login as loginOperation } from "@/redux/slices/authSlice";
 
 const Login = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => state.auth.currentUser);
+
   const [signUpFormData, setSignUpFormData] = useState({
     email: "",
     password: "",
@@ -33,7 +39,29 @@ const Login = () => {
     router.push("/sign-up");
   };
 
+  async function handleDeneme() {
+    console.log("user", user);
+  }
+
   async function handleLogin() {
+    console.log("email", signUpFormData.email);
+    console.log("password", signUpFormData.password);
+    const result = await dispatch(
+      loginOperation({
+        email: signUpFormData.email,
+        password: signUpFormData.password,
+      })
+    );
+    console.log("Login result", result);
+    if (result) {
+      console.log("Login success");
+      router.push("/home");
+    } else {
+      Alert.alert("Error", "Failed to Login");
+    }
+  }
+
+  async function handleLoginWithGoogle() {
     const result = await loginWithGoogle();
 
     if (result) {
@@ -72,8 +100,14 @@ const Login = () => {
               style={styles.formInput}
               placeholder="E-mail"
               placeholderTextColor="#01243A"
+              autoComplete="email"
+              importantForAutofill="yes"
+              autoFocus={false}
               onChangeText={(text) => {
-                setSignUpFormData({ ...signUpFormData, email: text });
+                setSignUpFormData((prev) => ({
+                  ...prev,
+                  email: text,
+                }));
               }}
             />
           </View>
@@ -85,7 +119,10 @@ const Login = () => {
               secureTextEntry={!showPassword}
               placeholderTextColor="#01243A"
               onChangeText={(text) => {
-                setSignUpFormData({ ...signUpFormData, password: text });
+                setSignUpFormData((prev) => ({
+                  ...prev,
+                  password: text,
+                }));
               }}
             />
             <MaterialCommunityIcons
@@ -103,7 +140,6 @@ const Login = () => {
             <Text style={styles.forgotPasswordText}>Şifremi Unuttum</Text>
           </TouchableOpacity>
         </View>
-
         <View style={{ flex: 3, backgroundColor: "white" }}></View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -187,6 +223,15 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+  },
+  loginWithGoogle: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#01243A",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
   },
   formButton: {
     width: "100%",
